@@ -29,6 +29,6 @@ for mod_name in module_names:
     except Exception as e:
         print(f"failed: {mod_name} -> {e}")
 
-from ui.controller import UiApp
-UiApp().run()
+from controller import UI
+ui = UI()
 print("done")
