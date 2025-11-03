@@ -29,6 +29,7 @@ class UI:
         self.tracker = AITracker()
 
         self.window.set_head_button.clicked.connect(self.set_head)
+        self.window.create_head_bb_button.clicked.connect(self.create_head_bb)
         self.window.show()
         self.window.raise_()
         self.window.activateWindow()
@@ -39,10 +40,10 @@ class UI:
         self.window.head_x.setText(f"{self.tracker.head.x:.3f}")
         self.window.head_y.setText(f"{self.tracker.head.y:.3f}")
         self.window.head_z.setText(f"{self.tracker.head.z:.3f}")
-        
-    def test(self):
-        print("test")
 
+    def create_head_bb(self):
+        self.tracker.head.create_bbox()
+        
     @classmethod
     def run(cls):
         global ui

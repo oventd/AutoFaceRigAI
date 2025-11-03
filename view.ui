@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>225</width>
-    <height>301</height>
+    <height>287</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>AutoAIFacialRig</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -51,6 +51,13 @@
      <widget class="QPushButton" name="set_head_button">
       <property name="text">
        <string>Set Head</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="create_head_bb_button">
+      <property name="text">
+       <string>Create Head Bounding Box</string>
       </property>
      </widget>
     </item>
