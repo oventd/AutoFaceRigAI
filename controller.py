@@ -1,9 +1,10 @@
 import sys
 from pathlib import Path
-from model import AITracker
 import maya.cmds as cmds
 
 from PySide2.QtUiTools import QUiLoader
+
+from model import AITracker
 
 class UI:
     _instance = None
@@ -27,9 +28,10 @@ class UI:
         self.ui_path = str(Path(__file__).with_name("view.ui"))
         self.window = QUiLoader().load(self.ui_path)
         self.tracker = AITracker()
-
+        
         self.window.set_head_button.clicked.connect(self.set_head)
         self.window.create_head_bb_button.clicked.connect(self.create_head_bb)
+        self.window.create_camera_button.clicked.connect(self.create_camera)
         self.window.show()
         self.window.raise_()
         self.window.activateWindow()
@@ -43,6 +45,9 @@ class UI:
 
     def create_head_bb(self):
         self.tracker.head.create_bbox()
+
+    def create_camera(self):
+        self.tracker.create_camera()
         
     @classmethod
     def run(cls):

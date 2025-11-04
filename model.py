@@ -2,6 +2,9 @@ import maya.cmds as cmds
 import maya.mel as mel
 import maya.api.OpenMaya as om
 
+from turntable.camera_creator import TurnTableCameraCreator
+
+
 class Head(object):
     def __init__(self):
         self._head_dag = None
@@ -39,19 +42,10 @@ class Head(object):
     def z(self):
         return self._transition[2]
     @property
-    def position(self):
+    def transition(self):
         return self._transition
     
     def create_bbox(self):
-        """
-        Create a cube from 6 world-space planes.
-        - front/back map to Z (z_max/z_min)
-        - up/down     map to Y (y_max/y_min)
-        - right/left  map to X (x_max/x_min)
-
-        All inputs are world positions (not half-extents).
-        """
-
         bbox_points = (
             cmds.xform(f"{self._namespace}FACIAL_L_HairC2", q=True, ws=True, t=True)[0],
             cmds.xform(f"{self._namespace}FACIAL_R_HairC2", q=True, ws=True, t=True)[0],
@@ -85,19 +79,93 @@ class Head(object):
         # 4) Create and place cube
         self._bbox, shape = cmds.polyCube(w=width, h=height, d=depth, name="geo_headBbox")
         cmds.xform(self._bbox, ws=True, t=(cx, cy, cz), ro=(0, 0, 0))
+        cmds.hide(self._bbox)
 
         # Freeze transforms (optional, keeps size baked into shape)
         cmds.makeIdentity(self._bbox, apply=True, t=True, r=True, s=True, n=False)
 
         self.grp_bbox = cmds.group(name="grp_headBbox", em=True)
-        cmds.parent(self.grp_bbox, self._bbox)
+        cmds.parent(self._bbox, self.grp_bbox)
 
+class TrackerCameraCreator(TurnTableCameraCreator):
+    def __init__(self, camera_name="AITracker_camera"):
+        super().__init__(camera_name=camera_name)
+    
+    def create(self, target, start_frame=1, end_frame=119, padding=1.3):
+        super().create(
+            target=target,
+            start_frame=start_frame,
+            end_frame=end_frame,
+            padding=padding
+            )
+        camera = self._camera_creator.camera
+        
+        # delete existing camera group
+        cmds.parent(camera, w=True)
+        cmds.delete(self._camera_creator.group)
 
+        # make camera group
+        grp_camera = cmds.group(name="grp_AITracker_camera", em=True)
+        cmds.xform(grp_camera, t=self.head.transition)
+        cmds.parent(camera, grp_camera)
+
+class SampleRate:
+    def __init__(self, value=10, x=None, y=None):
+        self._x = value if x is None else x
+        self._y = value if y is None else y
+    @property
+    def x(self):
+        return self._x
+    @x.setter
+    def x(self, value):
+        if not isinstance(value, int):
+            Warning("Sample rate must be an integer.")
+            return
+        self._x = value
+    @property
+    def y(self):
+        return self._y
+    @y.setter
+    def y(self, value):
+        if not isinstance(value, int):
+            Warning("Sample rate must be an integer.")
+            return
+        self._y = value
+    
+    
 class AITracker:
     def __init__(self):
         self._head = Head()
-
+        self._camera_creator = TrackerCameraCreator()
+        self._camera_limit = {"x":(-20, 20), "y":(-60, 60)}
+        self._sample_rate = SampleRate()
+    
     @property
     def head(self):
         return self._head
     
+    @property
+    def camera_creator(self):
+        return self._camera_creator
+    
+    @property
+    def sample_rate(self):
+        return (self._sample_rate.x, self._sample_rate.y)
+
+    @sample_rate.setter
+    def sample_rate(self, value=10, x=None, y=None):
+        self._sample_rate.x = value if x is None else x
+        self._sample_rate.y = value if y is None else y
+
+    
+    def create_camera(self):
+        
+
+        # make camera animation
+
+        
+
+        
+
+
+        
