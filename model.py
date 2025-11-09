@@ -2,7 +2,7 @@ import maya.cmds as cmds
 import maya.mel as mel
 import maya.api.OpenMaya as om
 
-from turntable.camera_creator import TurnTableCameraCreator
+from TurntableGenerator.camera_creator import TurnTableCameraCreator
 
 
 class Head(object):
@@ -90,24 +90,13 @@ class Head(object):
 class TrackerCameraCreator(TurnTableCameraCreator):
     def __init__(self, camera_name="AITracker_camera"):
         super().__init__(camera_name=camera_name)
-    
-    def create(self, target, start_frame=1, end_frame=119, padding=1.3):
-        super().create(
-            target=target,
-            start_frame=start_frame,
-            end_frame=end_frame,
-            padding=padding
-            )
-        camera = self._camera_creator.camera
-        
-        # delete existing camera group
-        cmds.parent(camera, w=True)
-        cmds.delete(self._camera_creator.group)
 
+    def create_group(self):
         # make camera group
+        cmds.select(clear=True)
         grp_camera = cmds.group(name="grp_AITracker_camera", em=True)
         cmds.xform(grp_camera, t=self.head.transition)
-        cmds.parent(camera, grp_camera)
+        cmds.parent(self._camera, grp_camera)
 
 class SampleRate:
     def __init__(self, value=10, x=None, y=None):
@@ -131,7 +120,7 @@ class SampleRate:
             Warning("Sample rate must be an integer.")
             return
         self._y = value
-    
+        
     
 class AITracker:
     def __init__(self):
@@ -156,16 +145,6 @@ class AITracker:
     def sample_rate(self, value=10, x=None, y=None):
         self._sample_rate.x = value if x is None else x
         self._sample_rate.y = value if y is None else y
-
     
     def create_camera(self):
-        
-
-        # make camera animation
-
-        
-
-        
-
-
-        
+        self._camera_creator.create()
