@@ -1,0 +1,3 @@
+[submodule "TurntableGenerator"]
+	path = TurntableGenerator
+	url = https://github.com/oventd/TurntableGenerator.git
