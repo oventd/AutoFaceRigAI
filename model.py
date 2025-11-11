@@ -1,7 +1,7 @@
-from head import Head
-from tracker_camera import TrackerCameraCreator
-from samplerate import SampleRate
-from tracker import Tracker
+from lib.head import Head
+from lib.tracker_camera import TrackerCameraCreator
+from lib.samplerate import SampleRate
+from lib.tracker import Tracker
 
 __all__ = [
     "Head",
