@@ -7,6 +7,8 @@ class Head(object):
     def __init__(self):
         self._head_dag = None
         self._transition = None
+        self._bbox = "geo_headBbox"
+        self._bbox_group = "grp_headBbox"
 
     def init(self):
         sel = cmds.ls(selection=True)[0]
@@ -39,8 +41,29 @@ class Head(object):
     @property
     def transition(self):
         return self._transition
+    @property
+    def bbox(self):
+        return self._bbox
+    @property
+    def bbox_group(self):
+        return self._bbox_group
+    
+    def delete_bbox(self):
+        if cmds.objExists(self._bbox_group):
+            try:
+                cmds.delete(self._bbox_group)
+            except Exception:
+                pass
+        if cmds.objExists(self._bbox):
+            try:
+                cmds.delete(self._bbox)
+            except Exception:
+                pass
 
     def create_bbox(self):
+        #clean up any existing nodes with the same names
+        self.delete_bbox()
+
         bbox_points = (
             cmds.xform(f"{self._namespace}FACIAL_L_HairC2", q=True, ws=True, t=True)[0],
             cmds.xform(f"{self._namespace}FACIAL_R_HairC2", q=True, ws=True, t=True)[0],
@@ -72,12 +95,14 @@ class Head(object):
         cz = (z_min + z_max) * 0.5
 
         # 4) Create and place cube
-        self._bbox, shape = cmds.polyCube(w=width, h=height, d=depth, name="geo_headBbox")
+        self._bbox, shape = cmds.polyCube(w=width, h=height, d=depth, name=self._bbox)
         cmds.xform(self._bbox, ws=True, t=(cx, cy, cz), ro=(0, 0, 0))
-        cmds.hide(self._bbox)
 
         # Freeze transforms (optional, keeps size baked into shape)
         cmds.makeIdentity(self._bbox, apply=True, t=True, r=True, s=True, n=False)
 
-        self.grp_bbox = cmds.group(name="grp_headBbox", em=True)
-        cmds.parent(self._bbox, self.grp_bbox)
+        self._bbox_group = cmds.group(name=self._bbox_group, em=True)
+        cmds.parent(self._bbox, self._bbox_group)
+
+    def hide_bbox(self):
+        cmds.hide(self._bbox_group)

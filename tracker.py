@@ -31,6 +31,7 @@ class Tracker:
         self._camera_creator.create(
             target=self.head.bbox,
             group_position=self.head.transition)
+        self.head.hide_bbox()
 
     
 
