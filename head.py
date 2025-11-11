@@ -10,21 +10,7 @@ class Head(object):
         self._bbox = "geo_headBbox"
         self._bbox_group = "grp_headBbox"
 
-    def init(self):
-        sel = cmds.ls(selection=True)[0]
-        if not sel:
-            cmds.warning("Nothing selected.")
-            return
-        if not cmds.objExists(sel):
-            return
-
-        msel = om.MSelectionList()
-        msel.add(sel)
-        self._head_dag = msel.getDagPath(0)
-        self._transition = cmds.xform(sel, q=True, ws=True, t=True)
-
-        ppn = self._head_dag.partialPathName()
-        self._namespace = f"{ppn.split(':')[0]}:" if ":" in ppn else ""
+        self._get_head_joint()
 
     @property
     def name(self):
@@ -47,7 +33,29 @@ class Head(object):
     @property
     def bbox_group(self):
         return self._bbox_group
-    
+
+    def _get_head_joint(self):
+        head_joint = None
+        matches = cmds.ls("::FACIAL_C_FacialRoot*", type="joint")
+        print(matches)
+        if matches:
+            if len(matches) > 1:
+                cmds.warning("Multiple head joints found. Please select one.")
+            if matches:
+                head_joint = matches[0]
+        else:
+            sel = cmds.ls(selection=True)[0]
+            if sel and cmds.nodeType(sel) == "joint":
+                head_joint = sel
+
+        msel = om.MSelectionList()
+        msel.add(head_joint)
+        self._head_dag = msel.getDagPath(0)
+        self._transition = cmds.xform(head_joint, q=True, ws=True, t=True)
+
+        ppn = self._head_dag.partialPathName()
+        self._namespace = f"{ppn.split(':')[0]}:" if ":" in ppn else ""
+
     def delete_bbox(self):
         if cmds.objExists(self._bbox_group):
             try:

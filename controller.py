@@ -27,7 +27,8 @@ class UI:
         
         self.ui_path = str(Path(__file__).with_name("view.ui"))
         self.window = QUiLoader().load(self.ui_path)
-        self.tracker = Tracker()
+        
+        self.tracker = None
         
         self.window.set_head_button.clicked.connect(self.set_head)
         self.window.create_head_bb_button.clicked.connect(self.create_head_bb)
@@ -37,7 +38,7 @@ class UI:
         self.window.activateWindow()
     
     def set_head(self):
-        self.tracker.init_head()
+        self.tracker = Tracker()
         self.window.head_name.setText(self.tracker.head.name)
         self.window.head_x.setText(f"{self.tracker.head.x:.3f}")
         self.window.head_y.setText(f"{self.tracker.head.y:.3f}")
