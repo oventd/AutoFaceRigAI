@@ -3,7 +3,7 @@ from tracker_camera import TrackerCameraCreator
 from samplerate import SampleRate
 
 
-class AITracker:
+class Tracker:
     def __init__(self):
         self._head = Head()
         self._camera_creator = TrackerCameraCreator()
@@ -28,5 +28,9 @@ class AITracker:
         self._sample_rate.y = value if y is None else y
 
     def create_camera(self):
-        self._camera_creator.create()
+        self._camera_creator.create(
+            target=self.head.bbox,
+            group_position=self.head.transition)
+
+    
 

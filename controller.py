@@ -4,7 +4,7 @@ import maya.cmds as cmds
 
 from PySide2.QtUiTools import QUiLoader
 
-from model import AITracker
+from model import Tracker
 
 class UI:
     _instance = None
@@ -27,7 +27,7 @@ class UI:
         
         self.ui_path = str(Path(__file__).with_name("view.ui"))
         self.window = QUiLoader().load(self.ui_path)
-        self.tracker = AITracker()
+        self.tracker = Tracker()
         
         self.window.set_head_button.clicked.connect(self.set_head)
         self.window.create_head_bb_button.clicked.connect(self.create_head_bb)
