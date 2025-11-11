@@ -1,7 +1,8 @@
+import maya.cmds as cmds
+
 from head import Head
 from tracker_camera import TrackerCameraCreator
 from samplerate import SampleRate
-
 
 class Tracker:
     def __init__(self):
@@ -9,10 +10,17 @@ class Tracker:
         self._camera_creator = TrackerCameraCreator()
         self._camera_limit = {"x": (-20, 20), "y": (-60, 60)}
         self._sample_rate = SampleRate()
+        self._group = "grp_tracker"
+
+        self._group = cmds.group(name=self._group, em=True)
 
     @property
     def head(self):
         return self._head
+
+    @property
+    def group(self):
+        return self._group
 
     @property
     def camera_creator(self):
@@ -27,11 +35,21 @@ class Tracker:
         self._sample_rate.x = value if x is None else x
         self._sample_rate.y = value if y is None else y
 
+    def init_head(self):
+        self.head.init()
+    
+    def create_head_bbox(self):
+        self.head.create_bbox()
+        cmds.parent(self.head.bbox_group, self.group)
+
     def create_camera(self):
         self._camera_creator.create(
             target=self.head.bbox,
             group_position=self.head.transition)
         self.head.hide_bbox()
+        
+        cmds.parent(self._camera_creator.group, self.group)
 
+    
     
 

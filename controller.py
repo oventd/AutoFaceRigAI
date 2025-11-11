@@ -37,14 +37,14 @@ class UI:
         self.window.activateWindow()
     
     def set_head(self):
-        self.tracker.head.init()
+        self.tracker.init_head()
         self.window.head_name.setText(self.tracker.head.name)
         self.window.head_x.setText(f"{self.tracker.head.x:.3f}")
         self.window.head_y.setText(f"{self.tracker.head.y:.3f}")
         self.window.head_z.setText(f"{self.tracker.head.z:.3f}")
 
     def create_head_bb(self):
-        self.tracker.head.create_bbox()
+        self.tracker.create_head_bbox()
 
     def create_camera(self):
         self.tracker.create_camera()
