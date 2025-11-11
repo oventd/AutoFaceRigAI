@@ -1,5 +1,5 @@
 from lib.head import Head
-from lib.tracker_camera import TrackerCameraCreator
+from lib.camera_creator import TrackerCameraCreator
 from lib.samplerate import SampleRate
 from lib.tracker import Tracker
 
