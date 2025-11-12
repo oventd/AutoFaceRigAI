@@ -4,7 +4,7 @@ import maya.cmds as cmds
 
 from PySide2.QtUiTools import QUiLoader
 
-from model import Tracker
+from model.tracker import Tracker
 
 class UI:
     _instance = None
