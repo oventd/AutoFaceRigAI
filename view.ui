@@ -69,6 +69,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QPushButton" name="viewport_button">
+      <property name="text">
+       <string>Clean Up Viewport</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Orientation::Vertical</enum>
