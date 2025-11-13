@@ -3,33 +3,32 @@ import os
 from pathlib import Path
 import importlib
 
-ROOT = r"D:\code\AutoFaceRigAI"
+ROOT = Path(__file__).resolve().parent
 
-root_path = Path(ROOT)
+root_path = ROOT
 sys.path.append(str(root_path))
-visited = set()
-visited.add(root_path)
+visited = {root_path}
 python_files = []
 dirs = list(root_path.iterdir())
-for dir in dirs:
-    if dir in visited:
+while dirs:
+    node = dirs.pop()
+    if node in visited:
         continue
-    if dir.is_dir():
-        sys.path.append(str(dir))
-        dirs.extend(list(dir.iterdir()))
-    if dir.is_file():
-        if dir.suffix != ".py":
-            continue
-        python_files.append(dir)
-    
-    visited.add(dir)
+    visited.add(node)
+    if node.is_dir():
+        sys.path.append(str(node))
+        dirs.extend(node.iterdir())
+        continue
+    if node.is_file() and node.suffix == ".py":
+        python_files.append(node)
 
 for python_file in python_files:
     mod_name = python_file.stem
+    if mod_name == Path(__file__).stem:
+        continue
     if mod_name in sys.modules:
         importlib.reload(sys.modules[mod_name])
-    else:
-        importlib.import_module(mod_name)
+    importlib.import_module(mod_name)
 
 if __name__ == "__main__":
     from controller import UI

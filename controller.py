@@ -33,6 +33,7 @@ class UI:
         self.window.set_head_button.clicked.connect(self.set_head)
         self.window.create_head_bb_button.clicked.connect(self.create_head_bb)
         self.window.create_camera_button.clicked.connect(self.create_camera)
+        self.window.clean_up_viewport_button.clicked.connect(self.clean_up_viewport)
         self.window.show()
         self.window.raise_()
         self.window.activateWindow()
@@ -49,7 +50,11 @@ class UI:
 
     def create_camera(self):
         self.tracker.create_camera()
-        
+    
+    def clean_up_viewport(self):
+        print("cleaning up viewport1111")
+        self.tracker.clean_up_viewport()
+
     @classmethod
     def run(cls):
         global ui
