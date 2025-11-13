@@ -24,11 +24,12 @@ for dir in dirs:
     
     visited.add(dir)
 
-print(python_files)
-
 for python_file in python_files:
-    importlib.reload(sys.modules[python_file.stem])
-    importlib.import_module(python_file.stem)
+    mod_name = python_file.stem
+    if mod_name in sys.modules:
+        importlib.reload(sys.modules[mod_name])
+    else:
+        importlib.import_module(mod_name)
 
 if __name__ == "__main__":
     from controller import UI
