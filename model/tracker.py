@@ -52,8 +52,5 @@ class Tracker:
         cmds.select(clear=True)
     
     def clean_up_viewport(self):
-        print("cleaning up viewport in tracker")
         self.viewport_manager = ViewportManager()
-        print("new")
-        self.viewport_manager.print_hello()
-        print("viewport cleaned up")
+        self.viewport_manager.clean_up_viewport()

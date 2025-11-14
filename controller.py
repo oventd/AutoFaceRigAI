@@ -52,7 +52,6 @@ class UI:
         self.tracker.create_camera()
     
     def clean_up_viewport(self):
-        print("cleaning up viewport1111")
         self.tracker.clean_up_viewport()
 
     @classmethod
