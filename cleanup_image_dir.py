@@ -7,5 +7,6 @@ def clear_folder(folder_path):
     for item in folder.iterdir():
         if item.is_file():
             item.unlink()
-
-clear_folder(image_path)
+            
+if __name__ == "__main__":
+    clear_folder(image_path)
