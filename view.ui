@@ -63,6 +63,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="create_camera_button">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>Create Camera</string>
       </property>
@@ -72,6 +75,13 @@
      <widget class="QPushButton" name="clean_up_viewport_button">
       <property name="text">
        <string>Clean Up Viewport</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="playblast_button">
+      <property name="text">
+       <string>Playblast</string>
       </property>
      </widget>
     </item>

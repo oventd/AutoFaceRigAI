@@ -3,6 +3,8 @@ import maya.cmds as cmds
 from head import Head
 from tracker_camera_creator import TrackerCameraCreator
 from viewport_manager import ViewportManager
+from TurntableGenerator.anim_playblast_generator import AnimPlayblastGenerator
+from pathlib import Path
 
 class Tracker:
     def __init__(self):
@@ -36,6 +38,7 @@ class Tracker:
     def create_head_bbox(self):
         self.head.create_bbox()
         self._parent(self.head.bbox_group)
+        self.head.hide_bbox()
 
     def create_camera(self):
         self._camera = TrackerCameraCreator(
@@ -43,7 +46,7 @@ class Tracker:
             group_position=self.head.transition
         )
         self._camera.create()
-        self.head.hide_bbox()
+        
 
         self._parent(self._camera.group)
 
@@ -54,3 +57,18 @@ class Tracker:
     def clean_up_viewport(self):
         self.viewport_manager = ViewportManager()
         self.viewport_manager.clean_up_viewport()
+    
+    def playblast(self):
+        camera_creator = TrackerCameraCreator(
+            target=self.head.bbox,
+            group_position=self.head.transition
+        )
+        self.playblast_generator = AnimPlayblastGenerator(camera_creator)
+        
+        image_path = str(Path(__file__).resolve().parent.parent / "image" / "tracker")
+        
+        self.playblast_generator.format = "image"
+        self.playblast_generator.path = image_path
+
+        self.playblast_generator.run()
+

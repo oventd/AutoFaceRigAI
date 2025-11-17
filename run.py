@@ -3,32 +3,61 @@ import os
 from pathlib import Path
 import importlib
 
-ROOT = Path(__file__).resolve().parent
+ROOT = r"D:\code\AutoFaceRigAI"
 
-root_path = ROOT
-sys.path.append(str(root_path))
-visited = {root_path}
+root_path = Path(ROOT)
+
+if str(root_path) not in sys.path:
+    sys.path.append(str(root_path))
+
 python_files = []
-dirs = list(root_path.iterdir())
-while dirs:
-    node = dirs.pop()
-    if node in visited:
-        continue
-    visited.add(node)
-    if node.is_dir():
-        sys.path.append(str(node))
-        dirs.extend(node.iterdir())
-        continue
-    if node.is_file() and node.suffix == ".py":
-        python_files.append(node)
+dirs = [root_path]
+visited = set()
 
-for python_file in python_files:
-    mod_name = python_file.stem
-    if mod_name == Path(__file__).stem:
+while dirs:
+    p = dirs.pop()
+    if p in visited:
         continue
-    if mod_name in sys.modules:
-        importlib.reload(sys.modules[mod_name])
-    importlib.import_module(mod_name)
+    visited.add(p)
+    if p.is_dir():
+        if str(p) not in sys.path:
+            sys.path.append(str(p))
+        dirs.extend(p.iterdir())
+    elif p.is_file() and p.suffix == ".py":
+        python_files.append(p.resolve())
+
+module_by_path = {}
+
+for name, module in list(sys.modules.items()):
+    module_file = getattr(module, "__file__", None)
+    if not module_file:
+        continue
+    try:
+        module_path = Path(module_file).resolve()
+    except Exception:
+        continue
+    key = module_path.with_suffix(".py")
+    if key not in module_by_path:
+        module_by_path[key] = []
+    module_by_path[key].append(module)
+
+for py_path in python_files:
+    modules = module_by_path.get(py_path, [])
+    if modules:
+        for m in modules:
+            try:
+                importlib.reload(m)
+            except Exception as e:
+                print("failed to reload", m.__name__, e)
+    else:
+        mod_name = py_path.stem
+        try:
+            if mod_name in sys.modules:
+                importlib.reload(sys.modules[mod_name])
+            else:
+                importlib.import_module(mod_name)
+        except Exception as e:
+            print("failed to import by name", mod_name, e)
 
 if __name__ == "__main__":
     from controller import UI

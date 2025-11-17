@@ -34,6 +34,7 @@ class UI:
         self.window.create_head_bb_button.clicked.connect(self.create_head_bb)
         self.window.create_camera_button.clicked.connect(self.create_camera)
         self.window.clean_up_viewport_button.clicked.connect(self.clean_up_viewport)
+        self.window.playblast_button.clicked.connect(self.playblast)
         self.window.show()
         self.window.raise_()
         self.window.activateWindow()
@@ -53,6 +54,9 @@ class UI:
     
     def clean_up_viewport(self):
         self.tracker.clean_up_viewport()
+    
+    def playblast(self):
+        self.tracker.playblast()
 
     @classmethod
     def run(cls):

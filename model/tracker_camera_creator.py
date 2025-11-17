@@ -25,6 +25,7 @@ class TrackerCameraCreator(AnimCameraCreator):
         self._limit_x = limit_x
         self._limit_y = limit_y
         self._sample_rate = 10
+        
 
     @property
     def limit_x(self):
@@ -58,9 +59,20 @@ class TrackerCameraCreator(AnimCameraCreator):
             raise ValueError("Sample rate must be an integer")
         self._sample_rate = int(sample_rate)
     
+    @property
+    def frame_range(self):
+        return (1, 1+len(self.calculate_angle(self._limit_x,
+                                              self._limit_y,
+                                              self._sample_rate)))
+    
     def create_camera(self):
+        current_visibility = cmds.getAttr(f"{self._target}.visibility")
+        if current_visibility == 0:
+            cmds.setAttr(f"{self._target}.visibility", 1)
         super().create_camera()
         self.autoframing(self.camera, self._target, self._padding)
+        if current_visibility == 0:
+            cmds.setAttr(f"{self._target}.visibility", 0)
     
     def _validate_limit(self, limit):
         if limit[0] > limit[1]:
