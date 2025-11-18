@@ -65,7 +65,7 @@ class Tracker:
         )
         self.playblast_generator = AnimPlayblastGenerator(camera_creator)
         
-        image_path = str(Path(__file__).resolve().parent.parent / "image" / "tracker")
+        image_path = str(Path(__file__).resolve().parent.parent / "image" / "playblast" / "playblast")
         
         self.playblast_generator.format = "image"
         self.playblast_generator.path = image_path

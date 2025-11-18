@@ -2,8 +2,12 @@ import sys
 import os
 from pathlib import Path
 import importlib
+import site
 
 ROOT = r"D:\code\AutoFaceRigAI"
+LIB = Path(ROOT) / "lib"
+
+site.addsitedir(str(LIB))
 
 root_path = Path(ROOT)
 
@@ -16,6 +20,9 @@ visited = set()
 
 while dirs:
     p = dirs.pop()
+    if p.name == "lib":
+        visited.add(p)
+        continue
     if p in visited:
         continue
     visited.add(p)

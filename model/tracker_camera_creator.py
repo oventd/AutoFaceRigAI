@@ -101,7 +101,6 @@ class TrackerCameraCreator(AnimCameraCreator):
     def create_group(self):
         self._group = cmds.group(name=self._group, empty=True)
         cmds.xform(self._group, ws=True, t=self._group_position)
-        print("xform", self._group_position)
         cmds.parent(self._camera, self._group)
 
     def animate_group(self):

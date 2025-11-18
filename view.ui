@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>225</width>
-    <height>287</height>
+    <height>360</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,6 +82,20 @@
      <widget class="QPushButton" name="playblast_button">
       <property name="text">
        <string>Playblast</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="ai_button">
+      <property name="text">
+       <string>AI</string>
       </property>
      </widget>
     </item>
