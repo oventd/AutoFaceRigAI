@@ -89,4 +89,3 @@ class RaycastManager:
         
         return closest_hit
 
-    def 

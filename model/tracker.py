@@ -5,6 +5,7 @@ from tracker_camera_creator import TrackerCameraCreator
 from viewport_manager import ViewportManager
 from TurntableGenerator.anim_playblast_generator import AnimPlayblastGenerator
 from pathlib import Path
+from temp_mesh_checker import MeshChecker
 
 class Tracker:
     def __init__(self):
@@ -72,3 +73,5 @@ class Tracker:
 
         self.playblast_generator.run()
 
+    def ai(self):
+        mesh_checker = MeshChecker(r"D:\code\AutoFaceRigAI\image\landmarks\landmarks.0001.json", self._camera.camera)

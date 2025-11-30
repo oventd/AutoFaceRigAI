@@ -35,6 +35,7 @@ class UI:
         self.window.create_camera_button.clicked.connect(self.create_camera)
         self.window.clean_up_viewport_button.clicked.connect(self.clean_up_viewport)
         self.window.playblast_button.clicked.connect(self.playblast)
+        self.window.ai_button.clicked.connect(self.ai)
         self.window.show()
         self.window.raise_()
         self.window.activateWindow()
@@ -57,6 +58,9 @@ class UI:
     
     def playblast(self):
         self.tracker.playblast()
+    
+    def ai(self):
+        self.tracker.ai()
 
     @classmethod
     def run(cls):
