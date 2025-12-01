@@ -5,13 +5,14 @@ from tracker_camera_creator import TrackerCameraCreator
 from viewport_manager import ViewportManager
 from TurntableGenerator.anim_playblast_generator import AnimPlayblastGenerator
 from pathlib import Path
-from temp_mesh_checker import MeshChecker
+from pixel_raycaster import PixelRaycaster
 
 class Tracker:
     def __init__(self):
         self._head = Head()
         self._camera = None
         self._group = "grp_tracker"
+        self._loc_group = "grp_landmark_locators"
 
         self._create_group()
 
@@ -30,11 +31,15 @@ class Tracker:
     def _create_group(self):
         self.delete_group()
         self._group = cmds.group(name=self._group, em=True)
+        self._loc_group = cmds.group(name=self._loc_group, em=True)
+
         cmds.select(clear=True)
 
     def delete_group(self):
         if cmds.objExists(self.group):
             cmds.delete(self.group)
+        if cmds.objExists(self._loc_group):
+            cmds.delete(self._loc_group)
    
     def create_head_bbox(self):
         self.head.create_bbox()
@@ -74,4 +79,17 @@ class Tracker:
         self.playblast_generator.run()
 
     def ai(self):
-        mesh_checker = MeshChecker(r"D:\code\AutoFaceRigAI\image\landmarks\landmarks.0001.json", self._camera.camera)
+        index = int(cmds.currentTime(query=True))
+        landmark_path = Path(__file__).resolve().parent.parent / "image" / "landmarks" / f"landmarks.{str(index).zfill(4)}.json"
+
+        data = load_json(str(landmark_path))
+        for index, point in enumerate(data[0]):
+            pixel = (point[0], point[1])
+            locator = PixelRaycaster(pixel, self._camera.camera, ["head_lod0_mesh"], f"{landmark_path.stem}_{index}").run()
+            if locator:
+                cmds.parent(locator, self._loc_group)
+
+def load_json(path):
+    import json
+    with open(path, "r") as f:
+        return json.load(f)

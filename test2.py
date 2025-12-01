@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # Example usage:
     # python visualize_landmarks.py path/to/landmarks.json path/to/image.png
     
-    index = 70
+    index = 72
     json_path_arg = fr"D:\code\AutoFaceRigAI\image\landmarks\landmarks.{str(index).zfill(4)}.json"
     image_path_arg = rf"D:\code\AutoFaceRigAI\image\playblast\tracker.{str(index).zfill(4)}.jpg"
     frame_idx_arg = 0
